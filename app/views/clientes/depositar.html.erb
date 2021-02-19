@@ -1,0 +1,18 @@
+<p class= "alert alert-info" id="notice"><%= notice %></p>
+<h1> Depósito </h1>
+
+<%= form_with do |form| %>
+  <div class="field">
+    <%= form.label :conta %>
+    <%= form.number_field :conta %>
+  </div>
+  <div class="field">
+    <%= form.label :valor %>
+    <%= form.number_field :valor %>
+  </div>
+  <div class="actions">
+    <%= form.submit "Enviar" %>
+  </div>
+  <%end%>
+
+<%= link_to 'Voltar', root_path %>

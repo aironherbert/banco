@@ -1,0 +1,2 @@
+class Extrato < ApplicationRecord
+end

@@ -1,0 +1,18 @@
+<%= form_with(model: cliente) do |form| %>
+  <div class="field">
+    <%= form.label :conta %>
+    <%= form.number_field :conta %>
+  </div>
+  <div class="field">
+    <%= form.label :valor %>
+    <%= form.number_field :valor %>
+  </div>
+  <div class="field">
+    <%= form.label :password %>
+    <%= form.password_field :password %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit "Enviar" %>
+  </div>
+<% end %>

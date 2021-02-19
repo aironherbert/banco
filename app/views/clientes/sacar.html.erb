@@ -1,0 +1,16 @@
+<h1> Saque </h1>
+<%= form_with do |form| %>
+  <div class="field">
+    <%= form.label :valor %>
+    <%= form.number_field :valor %>
+  </div>
+  <div class="field">
+    <%= form.label :password %>
+    <%= form.password_field :password %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit "Sacar" %>
+  </div>
+<% end %>
+<%= link_to "Voltar", cliente_path %>
