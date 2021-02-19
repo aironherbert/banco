@@ -8,15 +8,20 @@ class ClientesController < ApplicationController
 
   # GET /clientes/1 or /clientes/1.json
   def show
-    @a = Extrato.all
-    @extratos = Hash.new()
     
-    count=0
-    for i in 0..@a.length-1
-      if @a[i]["conta_origem"] == @cliente.conta or @a[i]["conta_destino"] == @cliente.conta
-        @extratos[count]=@a[i]
-        count=count+1
+    if current_cliente[:id].to_i == params[:id].to_i
+      @a = Extrato.all
+      @extratos = Hash.new()
+      
+      count=0
+      for i in 0..@a.length-1
+        if @a[i]["conta_origem"] == @cliente.conta or @a[i]["conta_destino"] == @cliente.conta
+          @extratos[count]=@a[i]
+          count=count+1
+        end
       end
+    else
+      redirect_to current_cliente
     end
   end
 
@@ -45,8 +50,9 @@ class ClientesController < ApplicationController
   end
 
   def transferir
-    if params["conta"].nil?
-    else
+    
+    if current_cliente[:id].to_i == params[:id].to_i
+      if not params["conta"].nil?
           id=params["id"].to_i
           conta_origem=current_cliente[:conta]
           valor=params[:valor].to_f
@@ -72,26 +78,33 @@ class ClientesController < ApplicationController
         else
           redirect_to current_cliente, notice: "Falha na transferência"
         end
-    end    
+      end
+      else
+        redirect_to current_cliente
+      end    
   end
 
   def sacar
-    valor = params[:valor].to_f
-    if valor > 0 and current_cliente[:saldo] >= valor
-      novo_valor = current_cliente[:saldo] - valor
-      respond_to do |format|
-        @cliente = Cliente.find_by(email: current_cliente[:email])
-        if @cliente.update(password: params[:password], saldo: novo_valor)
-          @extrato=Extrato.new(tipo: "Saque", conta_origem: @cliente["conta"], valor: valor, status: true)
-          @extrato.save
-          format.html { redirect_to @cliente, notice: 'Valor resgatado com sucesso' }
-          format.json { render :show, status: :created, location: @cliente }
-        else
-          format.html { render :new }
-          format.json { render json: @cliente.errors, status: :unprocessable_entity }
+    if current_cliente[:id].to_i == params[:id].to_i
+      valor = params[:valor].to_f
+      if valor > 0 and current_cliente[:saldo] >= valor
+        novo_valor = current_cliente[:saldo] - valor
+        respond_to do |format|
+          @cliente = Cliente.find_by(email: current_cliente[:email])
+          if @cliente.update(password: params[:password], saldo: novo_valor)
+            @extrato=Extrato.new(tipo: "Saque", conta_origem: @cliente["conta"], valor: valor, status: true)
+            @extrato.save
+            format.html { redirect_to @cliente, notice: 'Valor resgatado com sucesso' }
+            format.json { render :show, status: :created, location: @cliente }
+          else
+            format.html { render :new }
+            format.json { render json: @cliente.errors, status: :unprocessable_entity }
+          end
         end
-      end
-    end    
+      end    
+    else
+      redirect_to current_cliente
+    end
   end
 
   # GET /clientes/new

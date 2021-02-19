@@ -1,5 +1,5 @@
 <p class="alert alert-info" id="notice"><%= notice %></p>
-
+<%= javascript_pack_tag 'custom'%>
 <p>
   <strong>Nome:</strong>
   <%= @cliente.nome %>
@@ -26,8 +26,15 @@
 <%#= link_to 'Deletar', cliente_path(@cliente),
                   method: :delete,
                   data: { confirm: "Are you sure?" } %>
-
 <div id="myDIV" style="display:none">
+  <hr>
+  <p>Filtro</p>
+  <br>
+  <label for="fname" >Data Início:</label>
+  <input type="text" id="ini" name="ini" value= '<%= @extratos[0].created_at.localtime.strftime("%F %T")%>' onchange= "myFunction2()"><br>
+  <br>
+  <label for="lname">Data Fim:</label>
+  <input type="text" id="fim" name="fim" value= '<%= @extratos[@extratos.length-1].created_at.localtime.strftime("%F %T")%>' onchange= "myFunction2()">
   <hr>
   <table class="table thead-dark">
   <thead>
@@ -42,28 +49,41 @@
     </tr>
   </thead>
 
-  <tbody>
-    <% @extratos.each do |key,value| %>
-      <tr>
-        <td><%= value.tipo %></td>
-        <td><%= value.conta_origem %></td>
-        <td><%= value.conta_destino %></td>
-        <td><%= value.valor %></td>
-        <td><%= value.created_at %></td>
-        <td><%= value.status %></td>
-        </tr>
-    <% end %>
+  <tbody id="myTable">
   </tbody>
 </table>
 </div>
-
 <script>
-  function myFunction() {
+myFunction2()
+function myFunction() {
     var x = document.getElementById("myDIV");
     if (x.style.display === "none") {
-      x.style.display = "block";
+        x.style.display = "block";
     } else {
-      x.style.display = "none";
+        x.style.display = "none";
     }
-  }
-</script>
+}
+
+function myFunction2() {
+    var ini = document.getElementById("ini");
+    var fim = document.getElementById("fim");
+    var table = document.getElementById("myTable");
+    table.innerHTML = '';
+    '<%@extratos.reverse_each do |key, value|%>'
+    if (Date.parse(ini.value) <= Date.parse('<%=value[:created_at].localtime.strftime("%F %T")%>') && Date.parse(fim.value) >= Date.parse('<%=value[:created_at].localtime.strftime("%F %T")%>')) {
+        var row = table.insertRow(table.length);
+        var cell1 = row.insertCell(0);
+        var cell2 = row.insertCell(1);
+        var cell3 = row.insertCell(2);
+        var cell4 = row.insertCell(3);
+        var cell5 = row.insertCell(4);
+        var cell6 = row.insertCell(5);
+        cell1.innerHTML = '<%= value[:tipo] %>';
+        cell2.innerHTML = '<%= value[:conta_origem] %>';
+        cell3.innerHTML = '<%= value[:conta_destino] %>';
+        cell4.innerHTML = '<%= value[:valor] %>';
+        cell5.innerHTML = '<%= value[:created_at].localtime.strftime("%F %T") %>';
+        cell6.innerHTML = '<%= value[:status] %>';
+    }
+    '<%end%>'
+}</script>
