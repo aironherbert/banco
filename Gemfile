@@ -16,7 +16,6 @@ gem 'webpacker',                  '4.2.2'
 gem 'turbolinks',                 '5.2.1'
 gem 'jbuilder',                   '2.10.0'
 gem 'bootsnap',                   '1.4.6', require: false
-gem 'yarn', '~> 0.1.1'
 gem 'uglifier', '~> 4.2'
 
 group :development, :test do
