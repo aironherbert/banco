@@ -2,7 +2,8 @@
 <%= form_with do |form| %>
   <div class="field">
     <%= form.label :valor %>
-    <%= form.number_field :valor %>
+    <input type="text" name="valor" id= "valor" autocomplete="off" readonly 
+    onfocus="this.removeAttribute('readonly');" >
   </div>
   <div class="field">
     <%= form.label :password %>
