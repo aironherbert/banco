@@ -69,7 +69,7 @@ myFunction2()
       var table = document.getElementById("myTable");
       table.innerHTML = '';
       '<%@extratos.reverse_each do |key, value|%>'
-      if (Date.parse(ini.value) <= Date.parse('<%=value[:created_at].localtime.strftime("%F %T")%>') && Date.parse(fim.value) >= Date.parse('<%=value[:created_at].localtime.strftime("%F %T")%>')) {
+      if ((Date.parse(ini.value) <= Date.parse('<%=value[:created_at].localtime.strftime("%F %T")%>')) && (Date.parse(fim.value) >= Date.parse('<%=value[:created_at].localtime.strftime("%F %T")%>')) && ('<%=value[:valor]%>'!=0)) {
           var row = table.insertRow(table.length);
           var cell1 = row.insertCell(0);
           var cell2 = row.insertCell(1);

@@ -1,4 +1,5 @@
 class ClientesController < ApplicationController
+  
   before_action :set_cliente, only: %i[ show edit update destroy ]
 
   # GET /clientes or /clientes.json
@@ -9,7 +10,8 @@ class ClientesController < ApplicationController
   # GET /clientes/1 or /clientes/1.json
   def show
     
-    if current_cliente[:id].to_i == params[:id].to_i
+    @cliente=Cliente.find_by_id(params[:id])
+    if @cliente[:id].to_i == params[:id].to_i
       @a = Extrato.all
       @extratos = Hash.new()
       
@@ -20,8 +22,9 @@ class ClientesController < ApplicationController
           count=count+1
         end
       end
+      
     else
-      redirect_to current_cliente
+      redirect_to root_path
     end
   end
 
@@ -29,7 +32,7 @@ class ClientesController < ApplicationController
     if params["conta"].nil?
     else
       valor=params["valor"].to_f
-      conta=params["conta"].to_i
+      conta=params["conta"]
         if valor > 0 and not Cliente.find_by(conta: conta).nil?
           @cliente=Cliente.find_by(conta: conta)
           novo_valor = valor + @cliente["saldo"].to_f  
@@ -119,11 +122,14 @@ class ClientesController < ApplicationController
   # POST /clientes or /clientes.json
   def create
     @cliente = Cliente.new(cliente_params)
-    @cliente[:conta]=(0..9).to_a.shuffle[0..8].join
+    @cliente[:conta]=10.times.map { rand(10) }.join
     @cliente[:saldo]=0
+    extrato=Extrato.new(tipo: '000', conta_origem: @cliente[:conta], conta_destino: '000001', valor: 0, status: true)
+    extrato.save
+    
 
     respond_to do |format|
-      if @cliente.save
+      if @cliente.save and @cliente[:id].to_i != 1
         format.html { redirect_to @cliente, notice: "Cliente was successfully created." }
         format.json { render :show, status: :created, location: @cliente }
       else
@@ -135,7 +141,7 @@ class ClientesController < ApplicationController
 
   # PATCH/PUT /clientes/1 or /clientes/1.json
   def update
-    debugger
+    
     respond_to do |format|
       if @cliente.update(cliente_params)
         format.html { redirect_to @cliente, notice: "Cliente was successfully updated." }

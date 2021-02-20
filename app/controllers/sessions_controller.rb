@@ -1,10 +1,11 @@
 class SessionsController < ApplicationController
+  
   def new
   end
 
   def create
     @cliente = Cliente.find_by_email(params[:email])
-    if @cliente && @cliente[:nome]==params[:nome] && @cliente.authenticate(params[:password])
+    if @cliente && @cliente.authenticate(params[:password])
       atualiza
       session[:cliente_id] = @cliente.id
       redirect_to root_url, notice: "Logged in!"

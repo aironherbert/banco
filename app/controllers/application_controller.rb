@@ -1,4 +1,5 @@
 class ApplicationController < ActionController::Base
+  
 helper_method :current_cliente
   def current_cliente
     if session[:cliente_id]
