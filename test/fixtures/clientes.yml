@@ -2,14 +2,14 @@
 
 one:
   nome: MyString
-  email: MyString
+  email: "example@example.com"
   password_digest: <%= BCrypt::Password.create('secret') %>
   conta: MyString
   saldo: 1.5
 
 two:
   nome: MyString
-  email: MyString
+  email: "example2@example.com"
   password_digest: <%= BCrypt::Password.create('secret') %>
-  conta: MyString
+  conta: MyString2
   saldo: 1.5
