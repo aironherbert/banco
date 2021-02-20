@@ -129,7 +129,7 @@ class ClientesController < ApplicationController
     
 
     respond_to do |format|
-      if @cliente.save and @cliente[:id].to_i != 1
+      if @cliente.save
         format.html { redirect_to @cliente, notice: "Cliente was successfully created." }
         format.json { render :show, status: :created, location: @cliente }
       else

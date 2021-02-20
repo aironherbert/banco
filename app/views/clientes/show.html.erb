@@ -30,10 +30,10 @@
   <p>Filtro</p>
   <br>
   <label for="ini" >Data Início:</label>
-  <input type="text" id="ini" name="ini" value= '<%= @extratos[0].created_at.localtime.strftime("%F %T")%>' onchange= "myFunction2()"><br>
+  <input type="text" id="ini" name="ini" value= '<%= @extratos[0].created_at.in_time_zone("Brasilia").strftime("%F %T")%>' onchange= "myFunction2()"><br>
   <br>
   <label for="fim">Data Fim:</label>
-  <input type="text" id="fim" name="fim" value= '<%= @extratos[@extratos.length-1].created_at.localtime.strftime("%F %T")%>' onchange= "myFunction2()">
+  <input type="text" id="fim" name="fim" value= '<%= @extratos[@extratos.length-1].created_at.in_time_zone("Brasilia").strftime("%F %T")%>' onchange= "myFunction2()">
   <hr>
   <table class="table thead-dark">
   <thead>
@@ -69,7 +69,7 @@ myFunction2()
       var table = document.getElementById("myTable");
       table.innerHTML = '';
       '<%@extratos.reverse_each do |key, value|%>'
-      if ((Date.parse(ini.value) <= Date.parse('<%=value[:created_at].localtime.strftime("%F %T")%>')) && (Date.parse(fim.value) >= Date.parse('<%=value[:created_at].localtime.strftime("%F %T")%>')) && ('<%=value[:valor]%>'!=0)) {
+      if ((Date.parse(ini.value) <= Date.parse('<%=value[:created_at].in_time_zone("Brasilia").strftime("%F %T")%>')) && (Date.parse(fim.value) >= Date.parse('<%=value[:created_at].in_time_zone("Brasilia").strftime("%F %T")%>')) && ('<%=value[:valor]%>'!=0)) {
           var row = table.insertRow(table.length);
           var cell1 = row.insertCell(0);
           var cell2 = row.insertCell(1);
@@ -81,7 +81,7 @@ myFunction2()
           cell2.innerHTML = '<%= value[:conta_origem] %>';
           cell3.innerHTML = '<%= value[:conta_destino] %>';
           cell4.innerHTML = '<%= value[:valor] %>';
-          cell5.innerHTML = '<%= value[:created_at].localtime.strftime("%F %T") %>';
+          cell5.innerHTML = '<%= value[:created_at].in_time_zone("Brasilia").strftime("%F %T") %>';
           cell6.innerHTML = '<%= value[:status] %>';
       }
       '<%end%>'

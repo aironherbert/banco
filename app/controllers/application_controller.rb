@@ -1,5 +1,4 @@
 class ApplicationController < ActionController::Base
-  Time.zone = 'Brasilia'
 helper_method :current_cliente
   def current_cliente
     if session[:cliente_id]
